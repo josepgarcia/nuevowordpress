@@ -1,6 +1,8 @@
 #!/bin/bash
 mysqlbin="/Applications/MAMP/Library/bin/mysql"
 
+# GIST: https://gist.github.com/bgallagh3r/2853221
+
 #export red="\033[1;31m"
 #export green="\033[1;32m"
 #export yellow="\033[1;33m"
@@ -13,6 +15,7 @@ mysqlbin="/Applications/MAMP/Library/bin/mysql"
 GREEN='\033[0;32m'
 BLUE="\033[1;34m"
 NC='\033[0m' # No Color
+RED="\033[1;31m"
 
 if ! [[ $# -eq 1 ]]; then
   echo 'Necesario 1 parámetro, nombre del proyecto'
@@ -33,8 +36,7 @@ echo -e "${NC}"
 
 printf '\n'
 echo "Creating DB"
-SQL_CREATE="CREATE DATABASE $DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
-$mysqlbin -u $DBUSER -p$DBPASS -e $SQL_CREATE 2> /dev/null
+$mysqlbin -u $DBUSER -p$DBPASS -e "CREATE DATABASE $DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;" 2> /dev/null
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
@@ -42,12 +44,15 @@ mkdir $DIRNAME
 cd $DIRNAME
 printf '\n'
 echo "Downloading the latest version of Wordpress... "
-curl --remote-name --silent --show-error https://wordpress.org/latest.tar.gz
+#curl --remote-name --silent --show-error https://wordpress.org/latest.tar.gz
+curl --remote-name --silent --show-error https://es.wordpress.org/latest-es_ES.zip
+## IF ERROR 
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
-tar -zxvf latest.tar.gz
-rm latest.tar.gz
+#tar -zxvf latest.tar.gz
+unzip latest-es_ES.zip
+rm latest-es_ES.zip
 mv wordpress/* .
 rm -rf wordpress
 
@@ -59,6 +64,8 @@ cp wp-config-sample.php wp-config.php
 perl -pi -e "s/database_name_here/$DBNAME/g" wp-config.php
 perl -pi -e "s/username_here/$DBUSER/g" wp-config.php
 perl -pi -e "s/password_here/$DBPASS/g" wp-config.php
+RAND_DB=$( head -c 4 /dev/urandom | md5sum | cut -c 1-4 )
+perl -pi -e "s/\'wp_\'/\'wp${RAND_DB}_\'/g" wp-config.php
 #sed -i "" "s/database_name_here/$DBNAME/g" wp-config.php
 #sed -i "" "s/username_here/$DBUSER/g" wp-config.php
 #sed -i "" "s/password_here/$DBPASS/g" wp-config.php
@@ -97,6 +104,12 @@ rm -rf wp-content/themes/twentynineteen
 rm -rf wp-content/themes/twentytwenty
 rm -rf wp-content/themes/twentytwentyone
 rm -rf wp-content/themes/twentytwentythree
+echo -e "${GREEN}Done! ✅${NC}"
+printf '\n'
+
+
+echo "Copy default modules"
+cp -R /Users/josepgarcia/Webs/apache/__WP_THEMES/_INSTALAR/* wp-content/plugins/
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
