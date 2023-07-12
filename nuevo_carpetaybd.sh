@@ -1,6 +1,11 @@
 #!/bin/bash
 mysqlbin="/Applications/MAMP/Library/bin/mysql"
 
+DIRNAME="wp$1"
+DBNAME="wp_$1"
+DBUSER="root"
+DBPASS="root"
+
 # GIST: https://gist.github.com/bgallagh3r/2853221
 
 #export red="\033[1;31m"
@@ -21,10 +26,6 @@ if ! [[ $# -eq 1 ]]; then
   exit 1
 fi
 
-DIRNAME="wp$1"
-DBNAME="wp_$1"
-DBUSER="root"
-DBPASS="root"
 
 clear
 echo -e "${BLUE}"

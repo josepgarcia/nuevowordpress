@@ -19,8 +19,8 @@ DBPASS="root"
 
 GREEN='\033[0;32m'
 BLUE="\033[1;34m"
-NC='\033[0m' # No Color
 RED="\033[1;31m"
+NC='\033[0m' # No Color
 
 if ! [[ $# -eq 1 ]]; then
   echo 'Necesario 1 parámetro, nombre del proyecto'
@@ -35,15 +35,23 @@ echo "| WordPress Installer |"
 echo "+---------------------+"
 echo -e "${NC}"
 
-printf '\n'
-echo "Creating DB"
+printf '\nCheck MySQL...\n'
+$mysqlbin -u $DBUSER -p$DBPASS -e '\q'  &> /dev/null
+if [ $? -ne 0 ]; then
+  echo -e "${RED}MySQL connection error! ❌${NC}"
+  exit 1
+fi
+echo -e "${GREEN}Done! ✅${NC}"
+
+printf '\nCreating DB...'
 $mysqlbin -u $DBUSER -p$DBPASS -e "CREATE DATABASE $DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;" 2> /dev/null
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
 mkdir $DIRNAME
 cd $DIRNAME
-printf '\n'
+
+printf '\nWordPress...\n'
 echo "Downloading the latest version of Wordpress... "
 #curl --remote-name --silent --show-error https://wordpress.org/latest.tar.gz
 curl --remote-name --silent --show-error https://es.wordpress.org/latest-es_ES.zip
@@ -52,10 +60,12 @@ echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
 #tar -zxvf latest.tar.gz
+echo "Unzipping"
 unzip latest-es_ES.zip
 rm latest-es_ES.zip
 mv wordpress/* .
 rm -rf wordpress
+echo -e "${GREEN}Done! ✅${NC}"
 
 printf '\n'
 echo "Configuring WordPress... "
