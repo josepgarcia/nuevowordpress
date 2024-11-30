@@ -4,8 +4,8 @@ DBNAME="wp_$1"
 DBUSER="root"
 DBPASS="root"
 
-mysqlbin="/Applications/MAMP/Library/bin/mysql"
-
+#mysqlbin="/Applications/MAMP/Library/bin/mysql"
+mysqlbin="/opt/homebrew/opt/mysql/bin/mysql"
 
 
 ######### COLORS
@@ -17,7 +17,7 @@ mysqlbin="/Applications/MAMP/Library/bin/mysql"
 #export purple="\033[1;35m"
 #export cyan="\033[1;36m"
 #export grey="\033[0;37m"
-#export reset="\033[m"
+#export reset="\033[0m"
 
 GREEN='\033[0;32m'
 BLUE="\033[1;34m"

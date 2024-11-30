@@ -97,6 +97,7 @@ rm -rf wp-content/themes/twentyseventeen
 rm -rf wp-content/themes/twentynineteen
 rm -rf wp-content/themes/twentytwenty
 rm -rf wp-content/themes/twentytwentyone
+rm -rf wp-content/themes/twentytwentytwo
 rm -rf wp-content/themes/twentytwentythree
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
