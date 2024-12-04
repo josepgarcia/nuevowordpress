@@ -10,7 +10,6 @@ if ! [[ $# -eq 1 ]]; then
   exit 1
 fi
 
-
 clear
 echo -e "${BLUE}"
 echo "+---------------------+"
@@ -19,7 +18,7 @@ echo "+---------------------+"
 echo -e "${NC}"
 
 printf '\nCheck MySQL...\n'
-$mysqlbin -u $DBUSER -p$DBPASS -e '\q'  &> /dev/null
+$mysqlbin -u $DBUSER -p$DBPASS -e '\q' &>/dev/null
 if [ $? -ne 0 ]; then
   echo -e "${RED}MySQL connection error! ❌${NC}"
   exit 1
@@ -27,7 +26,7 @@ fi
 echo -e "${GREEN}Done! ✅${NC}"
 
 printf '\nCreating DB...'
-$mysqlbin -u $DBUSER -p$DBPASS -e "CREATE DATABASE $DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;" 2> /dev/null
+$mysqlbin -u $DBUSER -p$DBPASS -e "CREATE DATABASE $DBNAME CHARACTER SET utf8 COLLATE utf8_general_ci;" 2>/dev/null
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
@@ -38,7 +37,7 @@ printf '\nWordPress...\n'
 echo "Downloading the latest version of Wordpress... "
 #curl --remote-name --silent --show-error https://es.wordpress.org/latest-es_ES.zip
 curl --remote-name --progress-bar --show-error https://es.wordpress.org/latest-es_ES.zip
-## IF ERROR 
+## IF ERROR
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
@@ -58,7 +57,7 @@ cp wp-config-sample.php wp-config.php
 perl -pi -e "s/database_name_here/$DBNAME/g" wp-config.php
 perl -pi -e "s/username_here/$DBUSER/g" wp-config.php
 perl -pi -e "s/password_here/$DBPASS/g" wp-config.php
-RAND_DB=$( head -c 4 /dev/urandom | md5sum | cut -c 1-4 )
+RAND_DB=$(head -c 4 /dev/urandom | md5sum | cut -c 1-4)
 perl -pi -e "s/\'wp_\'/\'wp${RAND_DB}_\'/g" wp-config.php
 #sed -i "" "s/database_name_here/$DBNAME/g" wp-config.php
 #sed -i "" "s/username_here/$DBUSER/g" wp-config.php
@@ -99,6 +98,8 @@ rm -rf wp-content/themes/twentytwenty
 rm -rf wp-content/themes/twentytwentyone
 rm -rf wp-content/themes/twentytwentytwo
 rm -rf wp-content/themes/twentytwentythree
+rm -rf wp-content/themes/twentytwentyfour
+#rm -rf wp-content/themes/twentytwentyfive
 echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
@@ -113,6 +114,4 @@ echo -e "${GREEN}Done! ✅${NC}"
 printf '\n'
 
 printf '\n'
-echo -e "${GREEN}Fantastisch! All done 🙌${NC}";
-
-
+echo -e "${GREEN}Fantastisch! All done 🙌${NC}"
